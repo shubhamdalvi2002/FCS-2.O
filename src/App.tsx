@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react
 import { ShoppingCart, User, Menu, X, Phone, MapPin, Clock, ChevronRight, Facebook, Instagram, Twitter, ShoppingBag } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CartProvider, useCart } from './CartContext';
+import ScrollToTop from './components/ScrollToTop';
 
 // Pages (to be implemented)
 import Home from './pages/Home';
@@ -231,6 +232,7 @@ export default function App() {
             </Routes>
           </main>
           <Footer />
+          <ScrollToTop />
         </div>
       </Router>
     </CartProvider>
