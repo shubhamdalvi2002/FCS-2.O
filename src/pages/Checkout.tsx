@@ -109,12 +109,13 @@ const Checkout = () => {
       }
 
       setPlacedOrderId(finalOrderId);
+      const itemsToOrder = [...cart];
+      setOrderedItems(itemsToOrder);
       setFinalTotals({ subtotal, deliveryCharge: currentDeliveryCharge, total });
-      setOrderedItems([...cart]);
       
       // 1. Trigger Download IMMEDIATELY
       try {
-        triggerInvoiceDownload(finalOrderId, cart, subtotal, currentDeliveryCharge, total);
+        triggerInvoiceDownload(finalOrderId, itemsToOrder, subtotal, currentDeliveryCharge, total);
       } catch (invoiceErr) {
         console.error('Invoice generation failed:', invoiceErr);
         // Don't block the order if just the invoice fails
@@ -129,7 +130,7 @@ const Checkout = () => {
       // 4. Automatic Redirect to WhatsApp after a short delay
       // This delay ensures the PDF download has time to be initiated by the browser
       setTimeout(() => {
-        handleWhatsAppOrder([...cart], subtotal, currentDeliveryCharge, total);
+        handleWhatsAppOrder(itemsToOrder, subtotal, currentDeliveryCharge, total);
       }, 1500);
     } catch (err) {
       console.error('Checkout error:', err);
