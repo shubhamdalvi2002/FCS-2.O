@@ -85,9 +85,16 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const isShopOpen = React.useMemo(() => {
     if (!settings.shopOpen) return false;
+    
+    // Use IST (Asia/Kolkata) for shop hours
     const now = new Date();
-    const hours = now.getHours();
-    return hours >= settings.openHour && hours < settings.closeHour;
+    const istHour = parseInt(new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Asia/Kolkata',
+      hour: 'numeric',
+      hour12: false
+    }).format(now));
+    
+    return istHour >= settings.openHour && istHour < settings.closeHour;
   }, [settings.shopOpen, settings.openHour, settings.closeHour]);
 
   return (

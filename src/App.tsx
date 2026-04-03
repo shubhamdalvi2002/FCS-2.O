@@ -16,7 +16,7 @@ import Signup from './pages/Signup';
 import AdminDashboard from './pages/AdminDashboard';
 
 const Navbar = () => {
-  const { cart, isShopOpen } = useCart();
+  const { cart, isShopOpen, settings } = useCart();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const location = useLocation();
   const isAdminPage = location.pathname.startsWith('/admin');
@@ -51,9 +51,16 @@ const Navbar = () => {
           
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            <div className="flex items-center gap-2 text-[0.78rem] text-muted font-medium">
+            <div className="flex items-center gap-2 text-[0.78rem] text-muted font-medium group relative cursor-help">
               <div className={`w-2 h-2 rounded-full ${isShopOpen ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'}`}></div>
-              {isShopOpen ? 'Open Now' : 'Closed Now'}
+              {isShopOpen ? (
+                <span className="text-emerald-500 font-bold">Open Now</span>
+              ) : (
+                <span className="text-red-500 font-bold">Closed Now</span>
+              )}
+              <div className="absolute top-full left-0 mt-2 p-2 bg-black text-white text-[0.65rem] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-[60] pointer-events-none border border-white/10 shadow-xl">
+                Shop Hours: {settings.openHour > 12 ? settings.openHour - 12 : settings.openHour} {settings.openHour >= 12 ? 'PM' : 'AM'} - {settings.closeHour > 12 ? settings.closeHour - 12 : settings.closeHour} {settings.closeHour >= 12 ? 'PM' : 'AM'} (IST)
+              </div>
             </div>
             <Link to="/" className="text-muted hover:text-accent font-medium transition-colors">Home</Link>
             <Link to="/shop" className="text-muted hover:text-accent font-medium transition-colors">Shop</Link>
@@ -93,7 +100,14 @@ const Navbar = () => {
               <div className="px-4 py-6 space-y-4">
                 <div className="flex items-center gap-2 text-sm text-muted font-medium pb-2 border-b border-border/50">
                   <div className={`w-2 h-2 rounded-full ${isShopOpen ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'}`}></div>
-                  {isShopOpen ? 'Shop is Open' : 'Shop is Closed'}
+                  {isShopOpen ? (
+                    <span className="text-emerald-500 font-bold">Open Now</span>
+                  ) : (
+                    <span className="text-red-500 font-bold">Closed Now</span>
+                  )}
+                  <span className="text-[0.65rem] text-muted ml-auto">
+                    {settings.openHour > 12 ? settings.openHour - 12 : settings.openHour}{settings.openHour >= 12 ? 'PM' : 'AM'} - {settings.closeHour > 12 ? settings.closeHour - 12 : settings.closeHour}{settings.closeHour >= 12 ? 'PM' : 'AM'}
+                  </span>
                 </div>
                 <Link to="/" onClick={() => setIsMenuOpen(false)} className="block text-lg font-bold hover:text-accent">Home</Link>
                 <Link to="/shop" onClick={() => setIsMenuOpen(false)} className="block text-lg font-bold hover:text-accent">Shop</Link>
