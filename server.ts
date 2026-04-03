@@ -16,7 +16,13 @@ if (!fs.existsSync(DB_PATH)) {
       { id: "5", name: "Gavathi Eggs", category: "Eggs", price: 7, unit: "egg", image: "https://images.unsplash.com/photo-1598965675045-45c5e72c7d05?q=90&w=1200", description: "Nutritious gavathi desi eggs." }
     ],
     orders: [],
-    settings: { deliveryCharge: 10, codEnabled: true }
+    settings: { 
+      deliveryCharge: 10, 
+      codEnabled: true, 
+      shopOpen: true,
+      openHour: 8,
+      closeHour: 21
+    }
   }, null, 2));
 }
 

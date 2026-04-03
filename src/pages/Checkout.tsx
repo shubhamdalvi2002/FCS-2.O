@@ -43,7 +43,7 @@ const Checkout = () => {
     }
   }, [isDeliveryAllowed, deliveryType]);
 
-  const handleWhatsAppOrder = (currentCart: any[], sTotal: number, dCharge: number, fTotal: number) => {
+  const handleWhatsAppOrder = (currentCart: any[], sTotal: number, dCharge: number, fTotal: number, useWindowOpen: boolean = false) => {
     if (!formData.name || !formData.phone || (deliveryType === 'Delivery' && !formData.address)) {
       setError('Please fill in all required fields (Name, Phone, and Address for delivery).');
       return;
@@ -70,8 +70,11 @@ const Checkout = () => {
     const encoded = encodeURIComponent(msg);
     const waURL = `https://wa.me/919890501565?text=${encoded}`;
     
-    // Using window.location.href is more reliable in iFrames and mobile browsers than window.open
-    window.location.href = waURL;
+    if (useWindowOpen) {
+      window.open(waURL, '_blank');
+    } else {
+      window.location.href = waURL;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -113,25 +116,21 @@ const Checkout = () => {
       setOrderedItems(itemsToOrder);
       setFinalTotals({ subtotal, deliveryCharge: currentDeliveryCharge, total });
       
-      // 1. Trigger Download IMMEDIATELY
+      // 1. Redirect to WhatsApp IMMEDIATELY (using window.open to not kill the page)
+      handleWhatsAppOrder(itemsToOrder, subtotal, currentDeliveryCharge, total, true);
+      
+      // 2. Trigger Download
       try {
         triggerInvoiceDownload(finalOrderId, itemsToOrder, subtotal, currentDeliveryCharge, total);
       } catch (invoiceErr) {
         console.error('Invoice generation failed:', invoiceErr);
-        // Don't block the order if just the invoice fails
       }
       
-      // 2. Show Success Screen
+      // 3. Show Success Screen
       setIsSuccess(true);
       
-      // 3. Clear Cart
+      // 4. Clear Cart
       clearCart();
-
-      // 4. Automatic Redirect to WhatsApp after a short delay
-      // This delay ensures the PDF download has time to be initiated by the browser
-      setTimeout(() => {
-        handleWhatsAppOrder(itemsToOrder, subtotal, currentDeliveryCharge, total);
-      }, 1500);
     } catch (err) {
       console.error('Checkout error:', err);
       if (axios.isAxiosError(err)) {
@@ -194,7 +193,7 @@ const Checkout = () => {
         <div className="space-y-4">
           <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-accent3 font-syne">Order Placed Successfully!</h2>
           <p className="text-muted text-lg max-w-lg mx-auto">
-            Your invoice has been downloaded. Redirecting you to WhatsApp to confirm your order...
+            We've opened WhatsApp for your confirmation and downloaded your invoice.
           </p>
         </div>
 

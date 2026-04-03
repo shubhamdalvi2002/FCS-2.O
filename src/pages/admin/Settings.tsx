@@ -6,7 +6,9 @@ const Settings = () => {
   const [settings, setSettings] = useState({
     deliveryCharge: 10,
     codEnabled: true,
-    shopOpen: true
+    shopOpen: true,
+    openHour: 8,
+    closeHour: 21
   });
 
   const [isSaving, setIsSaving] = useState(false);
@@ -89,6 +91,28 @@ const Settings = () => {
               >
                 <div className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-all ${settings.shopOpen ? 'left-7' : 'left-1'}`}></div>
               </button>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-zinc-500 uppercase">Open Hour (24h)</label>
+                <input 
+                  type="number" 
+                  min="0" max="23"
+                  className="w-full p-4 rounded-2xl border-zinc-200 focus:ring-red-500"
+                  value={settings.openHour}
+                  onChange={(e) => setSettings({...settings, openHour: parseInt(e.target.value)})}
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-zinc-500 uppercase">Close Hour (24h)</label>
+                <input 
+                  type="number" 
+                  min="0" max="23"
+                  className="w-full p-4 rounded-2xl border-zinc-200 focus:ring-red-500"
+                  value={settings.closeHour}
+                  onChange={(e) => setSettings({...settings, closeHour: parseInt(e.target.value)})}
+                />
+              </div>
             </div>
             <button 
               onClick={handleSave}

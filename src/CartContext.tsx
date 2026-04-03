@@ -6,6 +6,8 @@ interface ShopSettings {
   deliveryCharge: number;
   codEnabled: boolean;
   shopOpen: boolean;
+  openHour: number;
+  closeHour: number;
 }
 
 interface CartContextType {
@@ -28,7 +30,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [settings, setSettings] = useState<ShopSettings>({
     deliveryCharge: 20,
     codEnabled: true,
-    shopOpen: true
+    shopOpen: true,
+    openHour: 8,
+    closeHour: 21
   });
 
   useEffect(() => {
@@ -83,10 +87,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!settings.shopOpen) return false;
     const now = new Date();
     const hours = now.getHours();
-    // Still keep the 8 AM to 9 PM logic as a secondary check if needed, 
-    // or just rely on the manual toggle. Let's combine them for safety.
-    return hours >= 8 && hours < 21;
-  }, [settings.shopOpen]);
+    return hours >= settings.openHour && hours < settings.closeHour;
+  }, [settings.shopOpen, settings.openHour, settings.closeHour]);
 
   return (
     <CartContext.Provider value={{ 
