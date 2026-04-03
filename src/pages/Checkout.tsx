@@ -123,7 +123,6 @@ const Checkout = () => {
       handleWhatsAppOrder(itemsToOrder, finalSubtotal, finalDeliveryCharge, finalTotal, false);
       
       // 3. Navigate to Success Page as a fallback/history entry
-      localStorage.setItem('lastOrderId', finalOrderId);
       navigate(`/order-success/${finalOrderId}`);
     } catch (err) {
       console.error('Checkout error:', err);
