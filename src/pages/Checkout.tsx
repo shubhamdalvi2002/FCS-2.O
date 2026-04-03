@@ -52,6 +52,7 @@ const Checkout = () => {
       `👤 *Customer Details:*\n` +
       `• *Name:* ${formData.name}\n` +
       `• *Phone:* ${formData.phone}\n` +
+      (formData.email ? `• *Email:* ${formData.email}\n` : '') +
       (deliveryType === 'Delivery' ? `📍 *Address:* ${formData.address}\n` : `🏪 *Type:* Shop Pickup\n`) +
       (formData.timePreference ? `⏰ *Preferred Time:* ${formData.timePreference}\n` : '') +
       (formData.specialInstructions ? `📝 *Instructions:* ${formData.specialInstructions}\n` : '') +
