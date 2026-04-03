@@ -25,10 +25,7 @@ const Checkout = () => {
   const currentDeliveryCharge = deliveryType === 'Delivery' ? deliveryCharge : 0;
   const total = subtotal + currentDeliveryCharge;
 
-  const chickenWeight = cart.filter(item => item.unit === 'kg').reduce((acc, item) => acc + item.quantity, 0);
-  const eggCount = cart.filter(item => item.unit === 'egg').reduce((acc, item) => acc + item.quantity, 0);
-  
-  const isDeliveryAllowed = chickenWeight >= 1 || eggCount >= 30;
+  const isDeliveryAllowed = subtotal >= 500;
 
   // Auto-switch to Pickup if Delivery is not allowed
   useEffect(() => {
@@ -100,9 +97,15 @@ const Checkout = () => {
         const res = await axios.post('/api/orders', orderData);
         if (res.data && res.data.id) {
           finalOrderId = res.data.id;
+          // Store in localStorage as fallback
+          localStorage.setItem(`order_${finalOrderId}`, JSON.stringify(res.data));
+        } else {
+          localStorage.setItem(`order_${finalOrderId}`, JSON.stringify({ ...orderData, id: finalOrderId, createdAt: new Date().toISOString() }));
         }
       } catch (apiErr) {
         console.warn('API order saving failed, proceeding to WhatsApp:', apiErr);
+        // Store in localStorage as fallback
+        localStorage.setItem(`order_${finalOrderId}`, JSON.stringify({ ...orderData, id: finalOrderId, createdAt: new Date().toISOString() }));
       }
 
       const itemsToOrder = [...cart];

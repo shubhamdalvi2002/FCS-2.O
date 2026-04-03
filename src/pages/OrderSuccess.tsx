@@ -19,8 +19,15 @@ const OrderSuccess = () => {
         // Store last order ID for automatic retrieval if they return to home
         localStorage.setItem('lastOrderId', orderId || '');
       } catch (err) {
-        console.error('Error fetching order:', err);
-        setError('Order not found or something went wrong.');
+        console.error('Error fetching order from API, trying localStorage:', err);
+        // Try to get from localStorage
+        const localOrder = localStorage.getItem(`order_${orderId}`);
+        if (localOrder) {
+          setOrder(JSON.parse(localOrder));
+          localStorage.setItem('lastOrderId', orderId || '');
+        } else {
+          setError('Order not found or something went wrong.');
+        }
       } finally {
         setLoading(false);
       }
