@@ -57,7 +57,9 @@ const Checkout = () => {
       (deliveryType === 'Delivery' ? `📍 *Address:* ${formData.address}\n` : '') +
       (formData.timePreference ? `⏰ *Preferred Time:* ${formData.timePreference}\n` : '') +
       (formData.specialInstructions ? `📝 *Instructions:* ${formData.specialInstructions}\n` : '') +
-      `\n📦 *Order Summary:*\n${orderLines}\n\n` +
+      `\n📦 *Order Summary:*\n${orderLines}\n` +
+      `• *Subtotal:* ₹${subtotal}\n` +
+      `• *Delivery Charge:* ₹${currentDeliveryCharge}\n\n` +
       `💰 *Total Amount: ₹${total}*\n\n` +
       `✅ *Please confirm my order. Thank you!*`;
 
