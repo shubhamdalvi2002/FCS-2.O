@@ -120,22 +120,48 @@ const ProductDetails = () => {
 
             {/* Cut Type Selection (Only for Chicken) */}
             {product.category === 'Chicken' && (
-              <div className="space-y-4">
-                <label className="text-[0.72rem] font-bold text-muted uppercase tracking-widest">Select Cut Type</label>
-                <div className="flex flex-wrap gap-3">
-                  {['Curry Cut', 'Biryani Cut', 'Boneless'].map((type) => (
-                    <button
-                      key={type}
-                      onClick={() => setCutType(type)}
-                      className={`px-6 py-3 rounded-2xl font-bold transition-all border-2 text-sm ${
-                        cutType === type 
-                          ? 'bg-accent border-accent text-black shadow-[0_8px_24px_rgba(245,166,35,0.3)]' 
-                          : 'bg-card border-border text-muted hover:border-accent/50 hover:text-text'
-                      }`}
-                    >
-                      {type}
-                    </button>
-                  ))}
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  <label className="text-[0.72rem] font-bold text-muted uppercase tracking-widest">Select Cutting Style</label>
+                  <div className="flex flex-wrap gap-3">
+                    {['Curry Cut', 'Biryani Cut', 'Fry Cut', 'Small Cutting', 'Medium Cutting', 'Boneless'].map((type) => (
+                      <button
+                        key={type}
+                        onClick={() => setCutType(type)}
+                        className={`px-5 py-2.5 rounded-xl font-bold transition-all border-2 text-xs ${
+                          cutType === type 
+                            ? 'bg-accent border-accent text-black shadow-[0_8px_24px_rgba(245,166,35,0.3)]' 
+                            : 'bg-card border-border text-muted hover:border-accent/50 hover:text-text'
+                        }`}
+                      >
+                        {type}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <label className="text-[0.72rem] font-bold text-muted uppercase tracking-widest">Special Requests</label>
+                  <div className="flex flex-wrap gap-3">
+                    {['Leg Pieces Only', 'With Lollipops', 'No Skin', 'With Skin'].map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => {
+                          const newType = cutType.includes(option) 
+                            ? cutType.replace(`, ${option}`, '').replace(option, '') 
+                            : cutType ? `${cutType}, ${option}` : option;
+                          setCutType(newType);
+                        }}
+                        className={`px-5 py-2.5 rounded-xl font-bold transition-all border-2 text-xs ${
+                          cutType.includes(option)
+                            ? 'bg-accent2 border-accent2 text-white shadow-[0_8px_24px_rgba(239,68,68,0.3)]' 
+                            : 'bg-card border-border text-muted hover:border-accent2/50 hover:text-text'
+                        }`}
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}

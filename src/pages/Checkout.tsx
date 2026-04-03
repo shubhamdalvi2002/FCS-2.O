@@ -245,8 +245,24 @@ const Checkout = () => {
                   <option value="Evening (4PM–9PM)">Evening (4PM–9PM)</option>
                 </select>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-4">
                 <label className="text-[0.72rem] font-bold text-muted uppercase tracking-wider">Special Instructions</label>
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {['Small Cutting', 'Medium Cutting', 'For Curry', 'For Biryani', 'For Fry', 'Leg Pieces', 'Lollipops'].map((chip) => (
+                    <button
+                      key={chip}
+                      type="button"
+                      onClick={() => {
+                        const current = formData.specialInstructions;
+                        const newVal = current ? `${current}, ${chip}` : chip;
+                        setFormData({...formData, specialInstructions: newVal});
+                      }}
+                      className="px-3 py-1.5 rounded-lg bg-surface border border-border text-[0.65rem] font-bold text-muted hover:border-accent hover:text-accent transition-all"
+                    >
+                      + {chip}
+                    </button>
+                  ))}
+                </div>
                 <input 
                   type="text" 
                   placeholder="e.g. Cut small, no skin, etc."
