@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, User, Menu, X, Phone, MapPin, Clock, ChevronRight, Facebook, Instagram, Twitter, ShoppingBag } from 'lucide-react';
+import { ShoppingCart, User, Menu, X, Phone, MapPin, Clock, ChevronRight, Facebook, Instagram, Twitter, ShoppingBag, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CartProvider, useCart } from './CartContext';
 import ScrollToTop from './components/ScrollToTop';
@@ -14,6 +14,7 @@ import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import AdminDashboard from './pages/AdminDashboard';
+import OrderSuccess from './pages/OrderSuccess';
 
 const Navbar = () => {
   const { cart, isShopOpen, settings } = useCart();
@@ -237,12 +238,79 @@ export default function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/admin/*" element={<AdminDashboard />} />
+              <Route path="/order-success/:orderId" element={<OrderSuccess />} />
             </Routes>
           </main>
           <Footer />
+          <RecentOrderNotification />
           <ScrollToTop />
         </div>
       </Router>
     </CartProvider>
   );
 }
+
+const RecentOrderNotification = () => {
+  const [lastOrder, setLastOrder] = React.useState<string | null>(null);
+  const location = useLocation();
+
+  React.useEffect(() => {
+    const orderId = localStorage.getItem('lastOrderId');
+    if (orderId && !location.pathname.includes('/order-success')) {
+      setLastOrder(orderId);
+    } else {
+      setLastOrder(null);
+    }
+  }, [location.pathname]);
+
+  if (!lastOrder) return null;
+
+  return (
+    <motion.div 
+      initial={{ y: 100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      className="fixed bottom-6 left-6 right-6 sm:left-auto sm:right-6 sm:w-96 z-[1000]"
+    >
+      <div className="bg-card border border-accent/30 p-5 rounded-[2rem] shadow-2xl flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-accent/10 rounded-xl flex items-center justify-center text-accent">
+              <ShoppingBag className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-[0.6rem] font-bold uppercase tracking-widest text-muted">Recent Order</p>
+              <p className="text-sm font-bold font-syne">#{lastOrder}</p>
+            </div>
+          </div>
+          <button 
+            onClick={() => {
+              localStorage.removeItem('lastOrderId');
+              setLastOrder(null);
+            }}
+            className="p-2 text-muted hover:text-accent transition-colors"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+        
+        <div className="flex gap-2">
+          <Link 
+            to={`/order-success/${lastOrder}`}
+            className="flex-1 bg-accent text-black px-4 py-3 rounded-2xl text-[0.75rem] font-bold flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all"
+          >
+            <Download className="w-4 h-4" />
+            View Invoice
+          </Link>
+          <a 
+            href={`https://wa.me/919890501565?text=Hi, I have a query about my order #${lastOrder}`}
+            target="_blank"
+            className="bg-[#25D366] text-white px-4 py-3 rounded-2xl text-[0.75rem] font-bold flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.556 4.122 1.527 5.856L.057 23.998l6.285-1.449A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.95 0-3.775-.5-5.362-1.375l-.384-.222-3.986.919.95-3.878-.25-.4A9.932 9.932 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+            WhatsApp
+          </a>
+        </div>
+      </div>
+    </motion.div>
+  );
+};

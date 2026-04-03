@@ -85,6 +85,16 @@ async function startServer() {
     res.json(db.orders);
   });
 
+  app.get("/api/orders/:id", (req, res) => {
+    const db = JSON.parse(fs.readFileSync(DB_PATH, "utf-8"));
+    const order = db.orders.find((o: any) => o.id === req.params.id);
+    if (order) {
+      res.json(order);
+    } else {
+      res.status(404).json({ message: "Order not found" });
+    }
+  });
+
   app.post("/api/orders", (req, res) => {
     const db = JSON.parse(fs.readFileSync(DB_PATH, "utf-8"));
     const newOrder = {
