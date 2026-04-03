@@ -15,6 +15,7 @@ const Checkout = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [placedOrderId, setPlacedOrderId] = useState<string | null>(null);
   const [orderedItems, setOrderedItems] = useState<any[]>([]);
+  const [finalTotals, setFinalTotals] = useState({ subtotal: 0, deliveryCharge: 0, total: 0 });
 
   const [formData, setFormData] = useState({
     name: '',
@@ -42,7 +43,7 @@ const Checkout = () => {
     }
   }, [isDeliveryAllowed, deliveryType]);
 
-  const handleWhatsAppOrder = (currentCart: typeof cart) => {
+  const handleWhatsAppOrder = (currentCart: any[], sTotal: number, dCharge: number, fTotal: number) => {
     if (!formData.name || !formData.phone || (deliveryType === 'Delivery' && !formData.address)) {
       setError('Please fill in all required fields (Name, Phone, and Address for delivery).');
       return;
@@ -61,9 +62,9 @@ const Checkout = () => {
       (formData.timePreference ? `⏰ *Preferred Time:* ${formData.timePreference}\n` : '') +
       (formData.specialInstructions ? `📝 *Instructions:* ${formData.specialInstructions}\n` : '') +
       `\n📦 *Order Summary:*\n${orderLines}\n` +
-      `• *Subtotal:* ₹${subtotal}\n` +
-      `• *Delivery Charge:* ₹${currentDeliveryCharge}\n\n` +
-      `💰 *Total Amount: ₹${total}*\n\n` +
+      `• *Subtotal:* ₹${sTotal}\n` +
+      `• *Delivery Charge:* ₹${dCharge}\n\n` +
+      `💰 *Total Amount: ₹${fTotal}*\n\n` +
       `✅ *Please confirm my order. Thank you!*`;
 
     const encoded = encodeURIComponent(msg);
@@ -93,34 +94,61 @@ const Checkout = () => {
         specialInstructions: formData.specialInstructions
       };
 
+      // Fallback ID if API fails
+      const orderId = `FCS-${Math.floor(1000 + Math.random() * 9000)}`;
+      let finalOrderId = orderId;
+
       // Try to save to DB, but don't block WhatsApp if it fails
       try {
         const res = await axios.post('/api/orders', orderData);
         if (res.data && res.data.id) {
-          setPlacedOrderId(res.data.id);
-        } else {
-          // Fallback ID if API doesn't return one
-          setPlacedOrderId(`FCS-${Math.floor(1000 + Math.random() * 9000)}`);
+          finalOrderId = res.data.id;
         }
       } catch (apiErr) {
         console.warn('API order saving failed, proceeding to WhatsApp:', apiErr);
-        // Fallback ID if API fails
-        setPlacedOrderId(`FCS-${Math.floor(1000 + Math.random() * 9000)}`);
       }
-      
-      // Trigger WhatsApp with current cart data
-      handleWhatsAppOrder(cart);
-      
+
+      setPlacedOrderId(finalOrderId);
+      setFinalTotals({ subtotal, deliveryCharge: currentDeliveryCharge, total });
       setOrderedItems([...cart]);
+      
+      // 1. Trigger Download IMMEDIATELY
+      triggerInvoiceDownload(finalOrderId, cart, subtotal, currentDeliveryCharge, total);
+      
+      // 2. Show Success Screen
       setIsSuccess(true);
-      // Clear cart AFTER triggering WhatsApp
+      
+      // 3. Clear Cart
       clearCart();
+
+      // 4. Automatic Redirect to WhatsApp after a short delay
+      // This delay ensures the PDF download has time to be initiated by the browser
+      setTimeout(() => {
+        handleWhatsAppOrder([...cart], subtotal, currentDeliveryCharge, total);
+      }, 1500);
     } catch (err) {
       console.error('Checkout error:', err);
       setError('Something went wrong. Please try again.');
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const triggerInvoiceDownload = (orderId: string, items: any[], sTotal: number, dCharge: number, fTotal: number) => {
+    generateInvoicePDF({
+      orderId,
+      customerName: formData.name,
+      customerPhone: formData.phone,
+      customerEmail: formData.email,
+      address: formData.address,
+      deliveryType,
+      paymentMethod,
+      items,
+      subtotal: sTotal,
+      deliveryCharge: dCharge,
+      total: fTotal,
+      date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })
+    });
   };
 
   const handleDownloadInvoice = () => {
@@ -135,9 +163,9 @@ const Checkout = () => {
       deliveryType,
       paymentMethod,
       items: orderedItems,
-      subtotal,
-      deliveryCharge: currentDeliveryCharge,
-      total,
+      subtotal: finalTotals.subtotal,
+      deliveryCharge: finalTotals.deliveryCharge,
+      total: finalTotals.total,
       date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })
     });
   };
@@ -156,25 +184,25 @@ const Checkout = () => {
         <div className="space-y-4">
           <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-accent3 font-syne">Order Placed Successfully!</h2>
           <p className="text-muted text-lg max-w-lg mx-auto">
-            Your order details have been sent to WhatsApp. Please confirm with the shop owner to finalize your delivery.
+            Your invoice has been downloaded. Redirecting you to WhatsApp to confirm your order...
           </p>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <button
+            onClick={() => handleWhatsAppOrder(orderedItems, finalTotals.subtotal, finalTotals.deliveryCharge, finalTotals.total)}
+            className="w-full sm:w-auto bg-[#25D366] text-white px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:translate-y-[-2px] hover:shadow-[0_8px_24px_rgba(37,211,102,0.3)] transition-all"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.556 4.122 1.527 5.856L.057 23.998l6.285-1.449A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.95 0-3.775-.5-5.362-1.375l-.384-.222-3.986.919.95-3.878-.25-.4A9.932 9.932 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+            Open WhatsApp
+          </button>
+
+          <button
             onClick={handleDownloadInvoice}
             className="w-full sm:w-auto bg-card border border-border text-text px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:border-accent transition-all group"
           >
             <Download className="w-5 h-5 group-hover:translate-y-1 transition-transform" />
-            Download Invoice
-          </button>
-          
-          <button
-            onClick={() => navigate('/')}
-            className="w-full sm:w-auto bg-accent text-black px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:translate-y-[-2px] hover:shadow-[0_8px_24px_rgba(245,166,35,0.3)] transition-all"
-          >
-            <Home className="w-5 h-5" />
-            Back to Home
+            Download Again
           </button>
         </div>
 
