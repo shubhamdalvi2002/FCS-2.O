@@ -53,7 +53,8 @@ const Checkout = () => {
       `• *Name:* ${formData.name}\n` +
       `• *Phone:* ${formData.phone}\n` +
       (formData.email ? `• *Email:* ${formData.email}\n` : '') +
-      (deliveryType === 'Delivery' ? `📍 *Address:* ${formData.address}\n` : `🏪 *Type:* Shop Pickup\n`) +
+      `• *Order Type:* ${deliveryType === 'Delivery' ? '🚀 Home Delivery' : '🏪 Shop Pickup'}\n` +
+      (deliveryType === 'Delivery' ? `📍 *Address:* ${formData.address}\n` : '') +
       (formData.timePreference ? `⏰ *Preferred Time:* ${formData.timePreference}\n` : '') +
       (formData.specialInstructions ? `📝 *Instructions:* ${formData.specialInstructions}\n` : '') +
       `\n📦 *Order Summary:*\n${orderLines}\n\n` +
