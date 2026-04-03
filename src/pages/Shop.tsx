@@ -14,12 +14,20 @@ const Shop = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
+    if (categoryFilter) {
+      setActiveCategory(categoryFilter);
+    } else {
+      setActiveCategory('All');
+    }
+  }, [categoryFilter]);
+
+  useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get('/api/products');
         setProducts(res.data);
       } catch (err) {
-        console.error(err);
+        console.error('Error fetching products:', err);
       } finally {
         setLoading(false);
       }
@@ -28,7 +36,7 @@ const Shop = () => {
   }, []);
 
   const filteredProducts = products.filter(p => {
-    const matchesCategory = activeCategory === 'All' || p.category === activeCategory;
+    const matchesCategory = activeCategory === 'All' || p.category.toLowerCase() === activeCategory.toLowerCase();
     const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
