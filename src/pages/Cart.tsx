@@ -107,13 +107,13 @@ const Cart = () => {
                 <span>Subtotal</span>
                 <span className="font-bold text-text">₹{subtotal}</span>
               </div>
-              <div className="flex justify-between text-muted text-sm">
+              <div className="flex justify-between text-muted text-sm italic">
                 <span>Delivery</span>
-                <span className="text-accent3 font-bold">₹{deliveryCharge}</span>
+                <span className="text-accent3 font-bold">Calculated at Checkout</span>
               </div>
               <div className="border-t border-border pt-4 flex justify-between items-end">
-                <span className="text-sm font-bold font-syne">Total</span>
-                <span className="text-3xl font-extrabold text-accent font-syne">₹{cartTotal}</span>
+                <span className="text-sm font-bold font-syne">Estimated Total</span>
+                <span className="text-3xl font-extrabold text-accent font-syne">₹{subtotal}</span>
               </div>
             </div>
 

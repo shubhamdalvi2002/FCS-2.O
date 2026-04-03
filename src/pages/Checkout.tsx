@@ -279,7 +279,9 @@ const Checkout = () => {
               </div>
               <div className="flex justify-between text-muted text-sm">
                 <span>Delivery Charge</span>
-                <span className="font-bold text-text">₹{currentDeliveryCharge}</span>
+                <span className={`font-bold ${currentDeliveryCharge === 0 ? 'text-emerald-500' : 'text-text'}`}>
+                  {currentDeliveryCharge === 0 ? 'FREE' : `₹${currentDeliveryCharge}`}
+                </span>
               </div>
               <div className="border-t border-border pt-4 flex justify-between items-end">
                 <span className="text-sm font-bold font-syne">Total</span>
