@@ -25,7 +25,10 @@ const Checkout = () => {
   const currentDeliveryCharge = deliveryType === 'Delivery' ? deliveryCharge : 0;
   const total = subtotal + currentDeliveryCharge;
 
-  const isDeliveryAllowed = subtotal >= 500;
+  const chickenWeight = cart.filter(item => item.unit === 'kg').reduce((acc, item) => acc + item.quantity, 0);
+  const eggCount = cart.filter(item => item.unit === 'egg').reduce((acc, item) => acc + item.quantity, 0);
+  
+  const isDeliveryAllowed = subtotal >= 500 || chickenWeight >= 1 || eggCount >= 30;
 
   // Auto-switch to Pickup if Delivery is not allowed
   useEffect(() => {
@@ -171,7 +174,7 @@ const Checkout = () => {
                 {!isDeliveryAllowed && (
                   <div className="mt-3 p-3 bg-accent2/10 border border-accent2/20 rounded-xl text-[0.7rem] text-accent2 font-bold uppercase tracking-wider flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-accent2 animate-pulse"></div>
-                    Min: 1kg Chicken or 30+ Eggs
+                    Min: ₹500 or 1kg Chicken or 30+ Eggs
                   </div>
                 )}
               </div>
