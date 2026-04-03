@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Truck, Store, CreditCard, Wallet, Banknote, CheckCircle2 } from 'lucide-react';
+import { Truck, Store, CreditCard, Wallet, Banknote, CheckCircle2, Download, Home } from 'lucide-react';
 import axios from 'axios';
 import { useCart } from '../CartContext';
+import { generateInvoicePDF } from '../utils/invoiceGenerator';
 
 const Checkout = () => {
   const { cart, subtotal, deliveryCharge, clearCart } = useCart();
@@ -12,6 +13,8 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState<'UPI' | 'Card' | 'COD'>('COD');
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [placedOrderId, setPlacedOrderId] = useState<string | null>(null);
+  const [orderedItems, setOrderedItems] = useState<any[]>([]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -92,14 +95,24 @@ const Checkout = () => {
 
       // Try to save to DB, but don't block WhatsApp if it fails
       try {
-        await axios.post('/api/orders', orderData);
+        const res = await axios.post('/api/orders', orderData);
+        if (res.data && res.data.id) {
+          setPlacedOrderId(res.data.id);
+        } else {
+          // Fallback ID if API doesn't return one
+          setPlacedOrderId(`FCS-${Math.floor(1000 + Math.random() * 9000)}`);
+        }
       } catch (apiErr) {
         console.warn('API order saving failed, proceeding to WhatsApp:', apiErr);
+        // Fallback ID if API fails
+        setPlacedOrderId(`FCS-${Math.floor(1000 + Math.random() * 9000)}`);
       }
       
       // Trigger WhatsApp with current cart data
       handleWhatsAppOrder(cart);
       
+      setOrderedItems([...cart]);
+      setIsSuccess(true);
       // Clear cart AFTER triggering WhatsApp
       clearCart();
     } catch (err) {
@@ -110,9 +123,28 @@ const Checkout = () => {
     }
   };
 
+  const handleDownloadInvoice = () => {
+    if (!placedOrderId) return;
+    
+    generateInvoicePDF({
+      orderId: placedOrderId,
+      customerName: formData.name,
+      customerPhone: formData.phone,
+      customerEmail: formData.email,
+      address: formData.address,
+      deliveryType,
+      paymentMethod,
+      items: orderedItems,
+      subtotal,
+      deliveryCharge: currentDeliveryCharge,
+      total,
+      date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })
+    });
+  };
+
   if (isSuccess) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-32 text-center space-y-8">
+      <div className="max-w-7xl mx-auto px-4 py-32 text-center space-y-12">
         <motion.div 
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -120,9 +152,34 @@ const Checkout = () => {
         >
           <CheckCircle2 className="w-16 h-16 text-accent3" />
         </motion.div>
-        <div className="space-y-2">
-          <h2 className="text-4xl font-black tracking-tight text-accent3 font-syne">Order Placed Successfully!</h2>
-          <p className="text-muted text-lg">Thank you for shopping with FCS 2.0. Redirecting to home...</p>
+        
+        <div className="space-y-4">
+          <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-accent3 font-syne">Order Placed Successfully!</h2>
+          <p className="text-muted text-lg max-w-lg mx-auto">
+            Your order details have been sent to WhatsApp. Please confirm with the shop owner to finalize your delivery.
+          </p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button
+            onClick={handleDownloadInvoice}
+            className="w-full sm:w-auto bg-card border border-border text-text px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:border-accent transition-all group"
+          >
+            <Download className="w-5 h-5 group-hover:translate-y-1 transition-transform" />
+            Download Invoice
+          </button>
+          
+          <button
+            onClick={() => navigate('/')}
+            className="w-full sm:w-auto bg-accent text-black px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:translate-y-[-2px] hover:shadow-[0_8px_24px_rgba(245,166,35,0.3)] transition-all"
+          >
+            <Home className="w-5 h-5" />
+            Back to Home
+          </button>
+        </div>
+
+        <div className="text-muted text-sm italic">
+          Order ID: <span className="font-bold text-text">{placedOrderId}</span>
         </div>
       </div>
     );
