@@ -15,8 +15,6 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) 
     { icon: LayoutDashboard, label: 'Overview', path: '/admin' },
     { icon: ShoppingBag, label: 'Products', path: '/admin/products' },
     { icon: Package, label: 'Orders', path: '/admin/orders' },
-    { icon: Users, label: 'Customers', path: '/admin/customers' },
-    { icon: BarChart3, label: 'Sales Reports', path: '/admin/reports' },
     { icon: Settings, label: 'Settings', path: '/admin/settings' },
   ];
 
@@ -216,8 +214,6 @@ const AdminDashboard = () => {
             <Route path="/" element={<Overview />} />
             <Route path="/products" element={<ProductsManagement />} />
             <Route path="/orders" element={<OrdersManagement />} />
-            <Route path="/customers" element={<div className="p-8 bg-white rounded-3xl shadow-sm border border-zinc-100">Customers Management (Coming Soon)</div>} />
-            <Route path="/reports" element={<div className="p-8 bg-white rounded-3xl shadow-sm border border-zinc-100">Sales Reports (Coming Soon)</div>} />
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </main>

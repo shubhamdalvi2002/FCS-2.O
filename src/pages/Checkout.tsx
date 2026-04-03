@@ -254,7 +254,10 @@ const Checkout = () => {
                 </select>
               </div>
               <div className="space-y-4">
-                <label className="text-[0.72rem] font-bold text-muted uppercase tracking-wider">Special Instructions</label>
+                <div className="flex justify-between items-center">
+                  <label className="text-[0.72rem] font-bold text-muted uppercase tracking-wider">Special Instructions</label>
+                  <span className="text-[0.6rem] text-muted font-medium uppercase tracking-widest">Optional</span>
+                </div>
                 <div className="flex flex-wrap gap-2 mb-3">
                   {['Small Cutting', 'Medium Cutting', 'For Curry', 'For Biryani', 'For Fry', 'Leg Pieces', 'Lollipops'].map((chip) => (
                     <button
@@ -265,19 +268,19 @@ const Checkout = () => {
                         const newVal = current ? `${current}, ${chip}` : chip;
                         setFormData({...formData, specialInstructions: newVal});
                       }}
-                      className="px-3 py-1.5 rounded-lg bg-surface border border-border text-[0.65rem] font-bold text-muted hover:border-accent hover:text-accent transition-all"
+                      className="px-3 py-1.5 rounded-lg bg-surface border border-border text-[0.65rem] font-bold text-muted hover:border-accent hover:text-accent transition-all active:scale-95"
                     >
                       + {chip}
                     </button>
                   ))}
                 </div>
-                <input 
-                  type="text" 
+                <textarea 
+                  rows={2}
                   placeholder="e.g. Cut small, no skin, etc."
                   className="w-full p-4 rounded-xl bg-card border-border text-text focus:ring-accent focus:border-accent"
                   value={formData.specialInstructions}
                   onChange={(e) => setFormData({...formData, specialInstructions: e.target.value})}
-                />
+                ></textarea>
               </div>
             </div>
           </section>
@@ -334,10 +337,13 @@ const Checkout = () => {
             <button 
               disabled={isProcessing}
               type="submit"
-              className="w-full bg-[#25D366] text-white py-5 rounded-2xl text-lg font-bold hover:translate-y-[-2px] hover:shadow-[0_8px_24px_rgba(37,211,102,0.35)] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[#25D366] text-white py-6 rounded-3xl text-xl font-black hover:translate-y-[-2px] hover:shadow-[0_12px_32px_rgba(37,211,102,0.4)] transition-all flex flex-col items-center justify-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed group"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.556 4.122 1.527 5.856L.057 23.998l6.285-1.449A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.95 0-3.775-.5-5.362-1.375l-.384-.222-3.986.919.95-3.878-.25-.4A9.932 9.932 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
-              {isProcessing ? 'Processing...' : 'Send Order on WhatsApp'}
+              <div className="flex items-center gap-3">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.556 4.122 1.527 5.856L.057 23.998l6.285-1.449A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.95 0-3.775-.5-5.362-1.375l-.384-.222-3.986.919.95-3.878-.25-.4A9.932 9.932 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+                <span>{isProcessing ? 'Processing...' : 'Order on WhatsApp'}</span>
+              </div>
+              <span className="text-[0.65rem] font-bold opacity-80 uppercase tracking-widest">Fast & Reliable</span>
             </button>
             <div className="text-center text-[0.72rem] text-muted leading-relaxed">
               Your order details will be sent directly to the shop owner via WhatsApp for fast processing.

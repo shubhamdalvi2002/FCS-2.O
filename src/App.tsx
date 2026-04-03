@@ -11,8 +11,6 @@ import Shop from './pages/Shop';
 import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
 import AdminDashboard from './pages/AdminDashboard';
 import OrderSuccess from './pages/OrderSuccess';
 
@@ -26,16 +24,16 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="bg-accent text-black py-1.5 overflow-hidden whitespace-nowrap border-b border-black/10">
+      <div className="bg-accent text-black py-1 overflow-hidden whitespace-nowrap border-b border-black/5">
         <div className="inline-block animate-marquee px-4">
-          <span className="mx-8 font-bold text-[0.65rem] uppercase tracking-widest">Farm Fresh Daily</span>
-          <span className="mx-8 font-bold text-[0.65rem] uppercase tracking-widest">Quick Confirmation</span>
-          <span className="mx-8 font-bold text-[0.65rem] uppercase tracking-widest">Home Delivery</span>
-          <span className="mx-8 font-bold text-[0.65rem] uppercase tracking-widest">Halal Certified</span>
-          <span className="mx-8 font-bold text-[0.65rem] uppercase tracking-widest">Farm Fresh Daily</span>
-          <span className="mx-8 font-bold text-[0.65rem] uppercase tracking-widest">Quick Confirmation</span>
-          <span className="mx-8 font-bold text-[0.65rem] uppercase tracking-widest">Home Delivery</span>
-          <span className="mx-8 font-bold text-[0.65rem] uppercase tracking-widest">Halal Certified</span>
+          <span className="mx-6 font-bold text-[0.6rem] uppercase tracking-widest">Farm Fresh Daily</span>
+          <span className="mx-6 font-bold text-[0.6rem] uppercase tracking-widest">Quick WhatsApp Confirmation</span>
+          <span className="mx-6 font-bold text-[0.6rem] uppercase tracking-widest">Home Delivery Available</span>
+          <span className="mx-6 font-bold text-[0.6rem] uppercase tracking-widest">Halal Certified</span>
+          <span className="mx-6 font-bold text-[0.6rem] uppercase tracking-widest">Farm Fresh Daily</span>
+          <span className="mx-6 font-bold text-[0.6rem] uppercase tracking-widest">Quick WhatsApp Confirmation</span>
+          <span className="mx-6 font-bold text-[0.6rem] uppercase tracking-widest">Home Delivery Available</span>
+          <span className="mx-6 font-bold text-[0.6rem] uppercase tracking-widest">Halal Certified</span>
         </div>
       </div>
       <div className="accent-line"></div>
@@ -46,7 +44,7 @@ const Navbar = () => {
               <ShoppingBag className="w-5 h-5 text-black" />
             </div>
             <span className="text-xl font-extrabold tracking-tighter font-heading">
-              FCS <span className="text-accent">2.0</span>
+              Family <span className="text-accent">Chicken Shop</span>
             </span>
           </Link>
           
@@ -235,8 +233,6 @@ export default function App() {
               <Route path="/product/:id" element={<ProductDetails />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
               <Route path="/admin/*" element={<AdminDashboard />} />
               <Route path="/order-success/:orderId" element={<OrderSuccess />} />
             </Routes>
