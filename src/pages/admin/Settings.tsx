@@ -9,6 +9,8 @@ const Settings = () => {
     shopOpen: true
   });
 
+  const [isSaving, setIsSaving] = useState(false);
+
   useEffect(() => {
     const fetchSettings = async () => {
       try {
@@ -20,6 +22,19 @@ const Settings = () => {
     };
     fetchSettings();
   }, []);
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      await axios.put('/api/settings', settings);
+      alert('Settings saved successfully!');
+    } catch (err) {
+      console.error(err);
+      alert('Failed to save settings.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <div className="max-w-4xl space-y-8">
@@ -75,8 +90,12 @@ const Settings = () => {
                 <div className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-all ${settings.shopOpen ? 'left-7' : 'left-1'}`}></div>
               </button>
             </div>
-            <button className="w-full bg-red-600 text-white py-4 rounded-2xl font-bold hover:bg-red-700 transition-all flex items-center justify-center shadow-lg shadow-red-100">
-              <Save className="w-5 h-5 mr-2" /> Save Settings
+            <button 
+              onClick={handleSave}
+              disabled={isSaving}
+              className="w-full bg-red-600 text-white py-4 rounded-2xl font-bold hover:bg-red-700 transition-all flex items-center justify-center shadow-lg shadow-red-100 disabled:opacity-50"
+            >
+              <Save className="w-5 h-5 mr-2" /> {isSaving ? 'Saving...' : 'Save Settings'}
             </button>
           </div>
         </div>

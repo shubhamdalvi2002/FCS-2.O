@@ -30,6 +30,16 @@ const OrdersManagement = () => {
     }
   };
 
+  const updateOrderStatus = async (orderId: string, newStatus: string) => {
+    try {
+      await axios.put(`/api/orders/${orderId}`, { status: newStatus });
+      setOrders(orders.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
+    } catch (err) {
+      console.error(err);
+      alert('Failed to update order status.');
+    }
+  };
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
@@ -80,9 +90,17 @@ const OrdersManagement = () => {
                   </td>
                   <td className="px-8 py-4 font-black text-red-600">₹{order.total}</td>
                   <td className="px-8 py-4">
-                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${getStatusColor(order.status)}`}>
-                      {order.status}
-                    </span>
+                    <select 
+                      value={order.status}
+                      onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                      className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase border-none focus:ring-0 cursor-pointer ${getStatusColor(order.status)}`}
+                    >
+                      <option value="Order Received">Order Received</option>
+                      <option value="Preparing">Preparing</option>
+                      <option value="Out for Delivery">Out for Delivery</option>
+                      <option value="Delivered">Delivered</option>
+                      <option value="Cancelled">Cancelled</option>
+                    </select>
                   </td>
                   <td className="px-8 py-4 text-zinc-500 text-sm">
                     {new Date(order.createdAt).toLocaleDateString()}

@@ -16,18 +16,10 @@ import Signup from './pages/Signup';
 import AdminDashboard from './pages/AdminDashboard';
 
 const Navbar = () => {
-  const { cart } = useCart();
+  const { cart, isShopOpen } = useCart();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const location = useLocation();
   const isAdminPage = location.pathname.startsWith('/admin');
-
-  const getShopStatus = React.useMemo(() => {
-    const now = new Date();
-    const hours = now.getHours();
-    // Shop hours: 8 AM to 9 PM (21:00)
-    const isOpen = hours >= 8 && hours < 21;
-    return isOpen;
-  }, []);
 
   if (isAdminPage) return null;
 
@@ -60,8 +52,8 @@ const Navbar = () => {
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
             <div className="flex items-center gap-2 text-[0.78rem] text-muted font-medium">
-              <div className={`w-2 h-2 rounded-full ${getShopStatus ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'}`}></div>
-              {getShopStatus ? 'Open Now' : 'Closed Now'}
+              <div className={`w-2 h-2 rounded-full ${isShopOpen ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'}`}></div>
+              {isShopOpen ? 'Open Now' : 'Closed Now'}
             </div>
             <Link to="/" className="text-muted hover:text-accent font-medium transition-colors">Home</Link>
             <Link to="/shop" className="text-muted hover:text-accent font-medium transition-colors">Shop</Link>
@@ -100,8 +92,8 @@ const Navbar = () => {
             >
               <div className="px-4 py-6 space-y-4">
                 <div className="flex items-center gap-2 text-sm text-muted font-medium pb-2 border-b border-border/50">
-                  <div className={`w-2 h-2 rounded-full ${getShopStatus ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'}`}></div>
-                  {getShopStatus ? 'Shop is Open' : 'Shop is Closed'}
+                  <div className={`w-2 h-2 rounded-full ${isShopOpen ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'}`}></div>
+                  {isShopOpen ? 'Shop is Open' : 'Shop is Closed'}
                 </div>
                 <Link to="/" onClick={() => setIsMenuOpen(false)} className="block text-lg font-bold hover:text-accent">Home</Link>
                 <Link to="/shop" onClick={() => setIsMenuOpen(false)} className="block text-lg font-bold hover:text-accent">Shop</Link>

@@ -32,9 +32,51 @@ async function startServer() {
     res.json(db.products);
   });
 
+  app.post("/api/products", (req, res) => {
+    const db = JSON.parse(fs.readFileSync(DB_PATH, "utf-8"));
+    const newProduct = {
+      id: Math.random().toString(36).substr(2, 9),
+      ...req.body
+    };
+    db.products.push(newProduct);
+    fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2));
+    res.status(201).json(newProduct);
+  });
+
+  app.put("/api/products/:id", (req, res) => {
+    const db = JSON.parse(fs.readFileSync(DB_PATH, "utf-8"));
+    const index = db.products.findIndex((p: any) => p.id === req.params.id);
+    if (index !== -1) {
+      db.products[index] = { ...db.products[index], ...req.body };
+      fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2));
+      res.json(db.products[index]);
+    } else {
+      res.status(404).json({ message: "Product not found" });
+    }
+  });
+
+  app.delete("/api/products/:id", (req, res) => {
+    const db = JSON.parse(fs.readFileSync(DB_PATH, "utf-8"));
+    db.products = db.products.filter((p: any) => p.id !== req.params.id);
+    fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2));
+    res.status(204).send();
+  });
+
   app.get("/api/settings", (req, res) => {
     const db = JSON.parse(fs.readFileSync(DB_PATH, "utf-8"));
     res.json(db.settings);
+  });
+
+  app.put("/api/settings", (req, res) => {
+    const db = JSON.parse(fs.readFileSync(DB_PATH, "utf-8"));
+    db.settings = { ...db.settings, ...req.body };
+    fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2));
+    res.json(db.settings);
+  });
+
+  app.get("/api/orders", (req, res) => {
+    const db = JSON.parse(fs.readFileSync(DB_PATH, "utf-8"));
+    res.json(db.orders);
   });
 
   app.post("/api/orders", (req, res) => {
@@ -48,6 +90,18 @@ async function startServer() {
     db.orders.push(newOrder);
     fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2));
     res.status(201).json(newOrder);
+  });
+
+  app.put("/api/orders/:id", (req, res) => {
+    const db = JSON.parse(fs.readFileSync(DB_PATH, "utf-8"));
+    const index = db.orders.findIndex((o: any) => o.id === req.params.id);
+    if (index !== -1) {
+      db.orders[index] = { ...db.orders[index], ...req.body };
+      fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2));
+      res.json(db.orders[index]);
+    } else {
+      res.status(404).json({ message: "Order not found" });
+    }
   });
 
   app.get("/api/admin/stats", (req, res) => {
