@@ -109,16 +109,19 @@ const Checkout = () => {
       }
 
       const itemsToOrder = [...cart];
+      const finalSubtotal = subtotal;
+      const finalDeliveryCharge = currentDeliveryCharge;
+      const finalTotal = total;
+
+      // 1. Clear Cart first to prevent duplicate orders
+      clearCart();
       
-      // 1. Redirect to WhatsApp IMMEDIATELY (using window.open to not kill the page)
-      handleWhatsAppOrder(itemsToOrder, subtotal, currentDeliveryCharge, total, true);
+      // 2. Redirect to WhatsApp using window.location.href for reliability
+      handleWhatsAppOrder(itemsToOrder, finalSubtotal, finalDeliveryCharge, finalTotal, false);
       
-      // 2. Navigate to Success Page
+      // 3. Navigate to Success Page as a fallback/history entry
       localStorage.setItem('lastOrderId', finalOrderId);
       navigate(`/order-success/${finalOrderId}`);
-      
-      // 3. Clear Cart
-      clearCart();
     } catch (err) {
       console.error('Checkout error:', err);
       if (axios.isAxiosError(err)) {

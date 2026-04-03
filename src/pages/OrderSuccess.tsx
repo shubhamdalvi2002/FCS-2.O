@@ -51,7 +51,7 @@ const OrderSuccess = () => {
       `✅ *I am back on the platform. Please confirm my order status!*`;
 
     const encoded = encodeURIComponent(msg);
-    window.open(`https://wa.me/919890501565?text=${encoded}`, '_blank');
+    window.location.href = `https://wa.me/919890501565?text=${encoded}`;
   };
 
   if (loading) {
