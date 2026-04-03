@@ -5,6 +5,7 @@ import { ShoppingCart, ArrowLeft, ShieldCheck, Truck, Clock, Plus, Minus } from 
 import axios from 'axios';
 import { Product } from '../types';
 import { useCart } from '../CartContext';
+import { FALLBACK_PRODUCTS } from '../data/products';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -20,9 +21,18 @@ const ProductDetails = () => {
       try {
         const res = await axios.get('/api/products');
         const found = res.data.find((p: Product) => p.id === id);
-        setProduct(found);
+        if (found) {
+          setProduct(found);
+        } else {
+          // Try fallback if not found in API
+          const fallbackFound = FALLBACK_PRODUCTS.find((p: Product) => p.id === id);
+          setProduct(fallbackFound || null);
+        }
       } catch (err) {
-        console.error(err);
+        console.error('Error fetching product:', err);
+        // Use fallback on error
+        const fallbackFound = FALLBACK_PRODUCTS.find((p: Product) => p.id === id);
+        setProduct(fallbackFound || null);
       } finally {
         setLoading(false);
       }

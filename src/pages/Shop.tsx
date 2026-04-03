@@ -4,9 +4,10 @@ import { motion } from 'motion/react';
 import { ShoppingCart, Filter, Search } from 'lucide-react';
 import axios from 'axios';
 import { Product } from '../types';
+import { FALLBACK_PRODUCTS } from '../data/products';
 
 const Shop = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>(FALLBACK_PRODUCTS);
   const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
   const categoryFilter = searchParams.get('cat');
@@ -25,9 +26,12 @@ const Shop = () => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get('/api/products');
-        setProducts(res.data);
+        if (res.data && res.data.length > 0) {
+          setProducts(res.data);
+        }
       } catch (err) {
         console.error('Error fetching products:', err);
+        // Keep fallback products on error
       } finally {
         setLoading(false);
       }
