@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { CheckCircle2, Download, ShoppingBag, ArrowRight, MessageSquare, Phone } from 'lucide-react';
+import { CheckCircle2, ShoppingBag, ArrowRight, MessageSquare, Phone } from 'lucide-react';
 import axios from 'axios';
-import { generateInvoicePDF } from '../utils/invoiceGenerator';
 
 const OrderSuccess = () => {
   const { orderId } = useParams();
@@ -31,25 +30,6 @@ const OrderSuccess = () => {
       fetchOrder();
     }
   }, [orderId]);
-
-  const handleDownloadInvoice = () => {
-    if (!order) return;
-    
-    generateInvoicePDF({
-      orderId: order.id,
-      customerName: order.customerName,
-      customerPhone: order.customerPhone,
-      customerEmail: order.customerEmail,
-      address: order.address,
-      deliveryType: order.deliveryType,
-      paymentMethod: order.paymentMethod,
-      items: order.items,
-      subtotal: order.subtotal,
-      deliveryCharge: order.deliveryCharge,
-      total: order.total,
-      date: new Date(order.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })
-    });
-  };
 
   const handleWhatsAppConfirm = () => {
     if (!order) return;
@@ -149,17 +129,10 @@ const OrderSuccess = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <button
-            onClick={handleDownloadInvoice}
-            className="flex items-center justify-center gap-3 bg-accent text-black px-8 py-5 rounded-2xl font-bold text-lg hover:translate-y-[-2px] hover:shadow-xl transition-all"
-          >
-            <Download className="w-6 h-6" />
-            Download Invoice
-          </button>
+        <div className="flex items-center justify-center">
           <button
             onClick={handleWhatsAppConfirm}
-            className="flex items-center justify-center gap-3 bg-[#25D366] text-white px-8 py-5 rounded-2xl font-bold text-lg hover:translate-y-[-2px] hover:shadow-xl transition-all"
+            className="w-full sm:w-auto flex items-center justify-center gap-3 bg-[#25D366] text-white px-12 py-5 rounded-2xl font-bold text-lg hover:translate-y-[-2px] hover:shadow-xl transition-all"
           >
             <MessageSquare className="w-6 h-6" />
             Chat with Shop

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Truck, Store, CreditCard, Wallet, Banknote, CheckCircle2, Download, Home } from 'lucide-react';
+import { Truck, Store, CreditCard, Wallet, Banknote, CheckCircle2, Home } from 'lucide-react';
 import axios from 'axios';
 import { useCart } from '../CartContext';
-import { generateInvoicePDF } from '../utils/invoiceGenerator';
 
 const Checkout = () => {
   const { cart, subtotal, deliveryCharge, clearCart } = useCart();
@@ -111,31 +110,11 @@ const Checkout = () => {
       // 1. Redirect to WhatsApp IMMEDIATELY (using window.open to not kill the page)
       handleWhatsAppOrder(itemsToOrder, subtotal, currentDeliveryCharge, total, true);
       
-      // 2. Trigger Download
-      try {
-        generateInvoicePDF({
-          orderId: finalOrderId,
-          customerName: formData.name,
-          customerPhone: formData.phone,
-          customerEmail: formData.email,
-          address: formData.address,
-          deliveryType,
-          paymentMethod,
-          items: itemsToOrder,
-          subtotal: subtotal,
-          deliveryCharge: currentDeliveryCharge,
-          total: total,
-          date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })
-        });
-      } catch (invoiceErr) {
-        console.error('Invoice generation failed:', invoiceErr);
-      }
-      
-      // 3. Navigate to Success Page
+      // 2. Navigate to Success Page
       localStorage.setItem('lastOrderId', finalOrderId);
       navigate(`/order-success/${finalOrderId}`);
       
-      // 4. Clear Cart
+      // 3. Clear Cart
       clearCart();
     } catch (err) {
       console.error('Checkout error:', err);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, User, Menu, X, Phone, MapPin, Clock, ChevronRight, Facebook, Instagram, Twitter, ShoppingBag, Download } from 'lucide-react';
+import { ShoppingCart, User, Menu, X, Phone, MapPin, Clock, ChevronRight, Facebook, Instagram, Twitter, ShoppingBag } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CartProvider, useCart } from './CartContext';
 import ScrollToTop from './components/ScrollToTop';
@@ -298,8 +298,8 @@ const RecentOrderNotification = () => {
             to={`/order-success/${lastOrder}`}
             className="flex-1 bg-accent text-black px-4 py-3 rounded-2xl text-[0.75rem] font-bold flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all"
           >
-            <Download className="w-4 h-4" />
-            View Invoice
+            <ShoppingBag className="w-4 h-4" />
+            View Order
           </Link>
           <a 
             href={`https://wa.me/919890501565?text=Hi, I have a query about my order #${lastOrder}`}
