@@ -113,7 +113,12 @@ const Checkout = () => {
       setOrderedItems([...cart]);
       
       // 1. Trigger Download IMMEDIATELY
-      triggerInvoiceDownload(finalOrderId, cart, subtotal, currentDeliveryCharge, total);
+      try {
+        triggerInvoiceDownload(finalOrderId, cart, subtotal, currentDeliveryCharge, total);
+      } catch (invoiceErr) {
+        console.error('Invoice generation failed:', invoiceErr);
+        // Don't block the order if just the invoice fails
+      }
       
       // 2. Show Success Screen
       setIsSuccess(true);
@@ -128,7 +133,11 @@ const Checkout = () => {
       }, 1500);
     } catch (err) {
       console.error('Checkout error:', err);
-      setError('Something went wrong. Please try again.');
+      if (axios.isAxiosError(err)) {
+        setError(`Server error: ${err.response?.data?.message || err.message}. Please try again.`);
+      } else {
+        setError('Something went wrong while placing your order. Please try again.');
+      }
     } finally {
       setIsProcessing(false);
     }
