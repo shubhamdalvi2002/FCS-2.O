@@ -138,9 +138,9 @@ const Checkout = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-12">
-        <div className="text-[0.72rem] text-accent uppercase tracking-[0.1em] font-bold mb-2">Checkout</div>
-        <h1 className="text-4xl font-extrabold font-heading tracking-tight">Complete Your Order</h1>
+      <div className="mb-16 text-center lg:text-left">
+        <div className="text-[0.72rem] text-accent uppercase tracking-[0.25em] font-black mb-3">Checkout</div>
+        <h1 className="text-4xl sm:text-6xl font-black font-heading tracking-tighter">Complete Your Order</h1>
       </div>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -192,73 +192,80 @@ const Checkout = () => {
           </section>
 
           {/* Customer Info */}
-          <section className="space-y-6">
-            <h3 className="text-xl font-bold font-syne">Customer Information</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-[0.72rem] font-bold text-muted uppercase tracking-wider">Full Name *</label>
+          <section className="space-y-8 bg-card p-8 rounded-[32px] border border-border">
+            <h3 className="text-2xl font-black font-heading tracking-tight flex items-center gap-3">
+              <CheckCircle2 className="text-accent w-6 h-6" /> Customer Information
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+              <div className="space-y-3">
+                <label className="text-[0.72rem] font-black text-muted uppercase tracking-[0.15em]">Full Name *</label>
                 <input 
                   required
                   type="text" 
                   placeholder="e.g. Rahul Sharma"
-                  className="w-full p-4 rounded-xl bg-card border-border text-text focus:ring-accent focus:border-accent"
+                  className="w-full p-4 rounded-2xl bg-surface border-border text-text focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all"
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-[0.72rem] font-bold text-muted uppercase tracking-wider">Phone Number *</label>
+              <div className="space-y-3">
+                <label className="text-[0.72rem] font-black text-muted uppercase tracking-[0.15em]">Phone Number *</label>
                 <input 
                   required
                   type="tel" 
                   placeholder="+91 98765 43210"
-                  className="w-full p-4 rounded-xl bg-card border-border text-text focus:ring-accent focus:border-accent"
+                  className="w-full p-4 rounded-2xl bg-surface border-border text-text focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all"
                   value={formData.phone}
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
                 />
               </div>
-              <div className="sm:col-span-2 space-y-2">
-                <label className="text-[0.72rem] font-bold text-muted uppercase tracking-wider">Email Address</label>
+              <div className="sm:col-span-2 space-y-3">
+                <label className="text-[0.72rem] font-black text-muted uppercase tracking-[0.15em]">Email Address</label>
                 <input 
                   type="email" 
                   placeholder="rahul@example.com"
-                  className="w-full p-4 rounded-xl bg-card border-border text-text focus:ring-accent focus:border-accent"
+                  className="w-full p-4 rounded-2xl bg-surface border-border text-text focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                 />
               </div>
               {deliveryType === 'Delivery' && (
-                <div className="sm:col-span-2 space-y-2">
-                  <label className="text-[0.72rem] font-bold text-muted uppercase tracking-wider">Delivery Address *</label>
+                <div className="sm:col-span-2 space-y-3">
+                  <label className="text-[0.72rem] font-black text-muted uppercase tracking-[0.15em]">Delivery Address *</label>
                   <textarea 
                     required
                     rows={3}
                     placeholder="House No., Street, Area, City..."
-                    className="w-full p-4 rounded-xl bg-card border-border text-text focus:ring-accent focus:border-accent"
+                    className="w-full p-4 rounded-2xl bg-surface border-border text-text focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all resize-none"
                     value={formData.address}
                     onChange={(e) => setFormData({...formData, address: e.target.value})}
                   ></textarea>
                 </div>
               )}
-              <div className="space-y-2">
-                <label className="text-[0.72rem] font-bold text-muted uppercase tracking-wider">Delivery Time Preference</label>
-                <select 
-                  className="w-full p-4 rounded-xl bg-card border-border text-text focus:ring-accent focus:border-accent appearance-none"
-                  value={formData.timePreference}
-                  onChange={(e) => setFormData({...formData, timePreference: e.target.value})}
-                >
-                  <option value="">As soon as possible</option>
-                  <option value="Morning (8AM–12PM)">Morning (8AM–12PM)</option>
-                  <option value="Afternoon (12PM–4PM)">Afternoon (12PM–4PM)</option>
-                  <option value="Evening (4PM–9PM)">Evening (4PM–9PM)</option>
-                </select>
+              <div className="space-y-3">
+                <label className="text-[0.72rem] font-black text-muted uppercase tracking-[0.15em]">Delivery Time Preference</label>
+                <div className="relative">
+                  <select 
+                    className="w-full p-4 rounded-2xl bg-surface border-border text-text focus:ring-2 focus:ring-accent/20 focus:border-accent appearance-none transition-all"
+                    value={formData.timePreference}
+                    onChange={(e) => setFormData({...formData, timePreference: e.target.value})}
+                  >
+                    <option value="">As soon as possible</option>
+                    <option value="Morning (8AM–12PM)">Morning (8AM–12PM)</option>
+                    <option value="Afternoon (12PM–4PM)">Afternoon (12PM–4PM)</option>
+                    <option value="Evening (4PM–9PM)">Evening (4PM–9PM)</option>
+                  </select>
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-muted">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </div>
+                </div>
               </div>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <label className="text-[0.72rem] font-bold text-muted uppercase tracking-wider">Special Instructions</label>
-                  <span className="text-[0.6rem] text-muted font-medium uppercase tracking-widest">Optional</span>
+                  <label className="text-[0.72rem] font-black text-muted uppercase tracking-[0.15em]">Special Instructions</label>
+                  <span className="text-[0.6rem] text-muted font-bold uppercase tracking-widest bg-surface px-2 py-0.5 rounded-md border border-border">Optional</span>
                 </div>
-                <div className="flex flex-wrap gap-2 mb-3">
+                <div className="flex flex-wrap gap-2 mb-1">
                   {['Small Cutting', 'Medium Cutting', 'For Curry', 'For Biryani', 'For Fry', 'Leg Pieces', 'Lollipops'].map((chip) => (
                     <button
                       key={chip}
@@ -268,7 +275,7 @@ const Checkout = () => {
                         const newVal = current ? `${current}, ${chip}` : chip;
                         setFormData({...formData, specialInstructions: newVal});
                       }}
-                      className="px-3 py-1.5 rounded-lg bg-surface border border-border text-[0.65rem] font-bold text-muted hover:border-accent hover:text-accent transition-all active:scale-95"
+                      className="px-3 py-1.5 rounded-xl bg-surface border border-border text-[0.65rem] font-bold text-muted hover:border-accent hover:text-accent transition-all active:scale-95 shadow-sm"
                     >
                       + {chip}
                     </button>
@@ -277,7 +284,7 @@ const Checkout = () => {
                 <textarea 
                   rows={2}
                   placeholder="e.g. Cut small, no skin, etc."
-                  className="w-full p-4 rounded-xl bg-card border-border text-text focus:ring-accent focus:border-accent"
+                  className="w-full p-4 rounded-2xl bg-surface border-border text-text focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all resize-none"
                   value={formData.specialInstructions}
                   onChange={(e) => setFormData({...formData, specialInstructions: e.target.value})}
                 ></textarea>

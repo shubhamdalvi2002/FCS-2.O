@@ -39,23 +39,23 @@ const Navbar = () => {
       <div className="accent-line"></div>
       <nav className="bg-bg/92 backdrop-blur-lg border-b border-border sticky top-0 z-50 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto flex justify-between h-16 items-center">
-          <Link to="/" className="flex items-center space-x-2 group">
-            <div className="w-9 h-9 bg-accent rounded-xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+          <Link to="/" className="flex items-center space-x-3 group shrink-0">
+            <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform shadow-lg shadow-accent/20">
               <ShoppingBag className="w-5 h-5 text-black" />
             </div>
-            <span className="text-xl font-extrabold tracking-tighter font-heading">
+            <span className="text-xl sm:text-2xl font-extrabold tracking-tighter font-heading whitespace-nowrap">
               Family <span className="text-accent">Chicken Shop</span>
             </span>
           </Link>
           
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            <div className="flex items-center gap-2 text-[0.78rem] text-muted font-medium group relative cursor-help">
-              <div className={`w-2 h-2 rounded-full ${isShopOpen ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'}`}></div>
+            <div className="flex items-center gap-2.5 text-[0.78rem] text-muted font-medium group relative cursor-help">
+              <div className={`w-2.5 h-2.5 rounded-full ${isShopOpen ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]' : 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]'}`}></div>
               {isShopOpen ? (
-                <span className="text-emerald-500 font-bold">Open Now</span>
+                <span className="text-emerald-500 font-bold uppercase tracking-wider">Open Now</span>
               ) : (
-                <span className="text-red-500 font-bold">Closed Now</span>
+                <span className="text-red-500 font-bold uppercase tracking-wider">Closed Now</span>
               )}
               <div className="absolute top-full left-0 mt-2 p-2 bg-black text-white text-[0.65rem] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-[60] pointer-events-none border border-white/10 shadow-xl">
                 Shop Hours: {settings.openHour > 12 ? settings.openHour - 12 : settings.openHour} {settings.openHour >= 12 ? 'PM' : 'AM'} - {settings.closeHour > 12 ? settings.closeHour - 12 : settings.closeHour} {settings.closeHour >= 12 ? 'PM' : 'AM'} (IST)
@@ -131,20 +131,20 @@ const Footer = () => {
   return (
     <footer className="bg-surface border-t border-border pt-12 pb-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          <div className="space-y-6">
-            <Link to="/" className="flex items-center space-x-2 group">
-              <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center text-black">
-                <ShoppingBag className="w-4 h-4" />
-              </div>
-              <span className="text-xl font-extrabold tracking-tighter font-heading">
-                FCS <span className="text-accent">2.0</span>
-              </span>
-            </Link>
-            <p className="text-muted text-sm leading-relaxed">
-              Premium quality farm-fresh chicken and eggs delivered to your doorstep. We prioritize hygiene, freshness, and customer satisfaction in every order.
-            </p>
-            <div className="flex items-center space-x-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16 text-center md:text-left">
+            <div className="space-y-6 flex flex-col items-center md:items-start">
+              <Link to="/" className="flex items-center space-x-3 group">
+                <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform shadow-lg shadow-accent/20">
+                  <ShoppingBag className="w-5 h-5 text-black" />
+                </div>
+                <span className="text-xl font-extrabold tracking-tighter font-heading">
+                  Family <span className="text-accent">Chicken Shop</span>
+                </span>
+              </Link>
+              <p className="text-muted text-sm leading-relaxed max-w-xs">
+                Your local destination for the freshest chicken cuts and farm-fresh eggs. Quality you can trust, delivered to your doorstep.
+              </p>
+              <div className="flex items-center space-x-4">
               <a href="https://www.instagram.com/fcs2.o" target="_blank" className="w-10 h-10 bg-card border border-border rounded-xl flex items-center justify-center text-muted hover:border-accent hover:text-accent transition-all">
                 <Instagram className="w-5 h-5" />
               </a>

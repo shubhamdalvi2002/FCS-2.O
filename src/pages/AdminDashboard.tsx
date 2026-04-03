@@ -34,9 +34,14 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) 
       </AnimatePresence>
 
       <div className={`fixed lg:sticky top-0 left-0 w-64 bg-zinc-900 text-white h-screen flex flex-col z-[101] transition-transform duration-300 lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="p-8 flex justify-between items-center">
-          <h2 className="text-2xl font-black text-red-500 tracking-tighter">FCS ADMIN</h2>
-          <button onClick={onClose} className="lg:hidden p-2 text-zinc-400 hover:text-white">
+        <div className="p-8 flex justify-between items-center border-b border-zinc-800/50 mb-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center shadow-lg shadow-red-900/40">
+              <Package className="w-6 h-6 text-white" />
+            </div>
+            <h2 className="text-xl font-black text-white tracking-tighter uppercase">FCS Admin</h2>
+          </div>
+          <button onClick={onClose} className="lg:hidden p-2 text-zinc-400 hover:text-white transition-colors">
             <X className="w-6 h-6" />
           </button>
         </div>
@@ -93,15 +98,15 @@ const Overview = () => {
 
   return (
     <div className="space-y-12">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
         {cards.map((card, i) => (
-          <div key={i} className="bg-white p-8 rounded-[32px] shadow-sm border border-zinc-100 flex items-center space-x-6">
-            <div className={`${card.color} p-4 rounded-2xl text-white shadow-lg shadow-${card.color.split('-')[1]}-200`}>
-              <card.icon className="w-8 h-8" />
+          <div key={i} className="bg-white p-6 lg:p-8 rounded-[32px] shadow-sm border border-zinc-100 flex items-center space-x-6 hover:shadow-md transition-shadow">
+            <div className={`${card.color} p-4 rounded-2xl text-white shadow-lg shadow-${card.color.split('-')[1]}-100 shrink-0`}>
+              <card.icon className="w-7 h-7 lg:w-8 lg:h-8" />
             </div>
-            <div>
-              <p className="text-zinc-400 text-sm font-bold uppercase tracking-wider">{card.label}</p>
-              <h3 className="text-3xl font-black">{card.value}</h3>
+            <div className="min-w-0">
+              <p className="text-zinc-400 text-[0.65rem] lg:text-xs font-black uppercase tracking-[0.15em] truncate">{card.label}</p>
+              <h3 className="text-2xl lg:text-3xl font-black truncate">{card.value}</h3>
             </div>
           </div>
         ))}
@@ -175,20 +180,20 @@ const AdminDashboard = () => {
     <div className="flex min-h-screen bg-zinc-50">
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       <div className="flex-grow min-w-0">
-        <header className="bg-white h-20 border-b border-zinc-100 flex items-center justify-between px-4 lg:px-12 sticky top-0 z-40">
-          <div className="flex items-center gap-4">
+        <header className="bg-white h-20 border-b border-zinc-100 flex items-center justify-between px-6 lg:px-12 sticky top-0 z-40 backdrop-blur-md bg-white/80">
+          <div className="flex items-center gap-6 flex-grow">
             <button 
               onClick={() => setIsSidebarOpen(true)}
-              className="lg:hidden p-2 text-zinc-400 hover:text-red-600"
+              className="lg:hidden p-2 text-zinc-400 hover:text-red-600 transition-colors"
             >
               <Menu className="w-6 h-6" />
             </button>
-            <div className="relative w-full sm:w-96">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
+            <div className="relative w-full max-w-md hidden sm:block">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
               <input 
                 type="text" 
                 placeholder="Search anything..." 
-                className="w-full pl-12 pr-4 py-2 rounded-xl bg-zinc-50 border-none focus:ring-2 focus:ring-red-500 text-sm"
+                className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-zinc-50 border border-zinc-100 focus:ring-2 focus:ring-red-500/20 focus:border-red-500 text-sm transition-all"
               />
             </div>
           </div>

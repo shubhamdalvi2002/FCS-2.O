@@ -7,22 +7,22 @@ const Home = () => {
   return (
     <div className="space-y-0 pb-10">
       {/* Hero Section */}
-      <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-10 md:pt-12 md:pb-16 lg:pt-16 lg:pb-20">
-        <div className="space-y-8 text-center lg:text-left">
-          <div className="flex flex-col items-center lg:items-start gap-6">
+      <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-12 md:pt-16 md:pb-20 lg:pt-24 lg:pb-28">
+        <div className="space-y-10 text-center lg:text-left">
+          <div className="flex flex-col items-center lg:items-start gap-8">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 bg-accent/10 border border-accent/25 rounded-full px-4 py-1.5 text-[0.75rem] text-accent font-medium uppercase tracking-wider"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="inline-flex items-center gap-2.5 bg-accent/10 border border-accent/25 rounded-full px-5 py-2 text-[0.75rem] text-accent font-bold uppercase tracking-[0.15em] shadow-sm"
             >
-              <Store className="w-3 h-3" /> Locally Owned · Freshly Sourced
+              <Store className="w-3.5 h-3.5" /> Locally Owned · Freshly Sourced
             </motion.div>
             
             <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl 2xl:text-[10rem] font-extrabold leading-[0.9] tracking-tighter font-syne"
+              transition={{ delay: 0.1, duration: 0.6 }}
+              className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] 2xl:text-[12rem] font-black leading-[0.85] tracking-tighter font-heading"
             >
               Fresh Chicken,<br /> <span className="text-accent">Delivered Fast.</span>
             </motion.h1>
@@ -30,8 +30,8 @@ const Home = () => {
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-muted text-lg md:text-xl lg:text-2xl leading-relaxed max-w-3xl mx-auto lg:mx-0"
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="text-muted text-lg md:text-xl lg:text-3xl leading-relaxed max-w-4xl mx-auto lg:mx-0 font-medium"
             >
               Order fresh chicken cuts and farm eggs from your local shop. Place your order in seconds — we'll confirm via WhatsApp instantly.
             </motion.p>
@@ -80,23 +80,23 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Trust Section (Moved to Bottom) */}
-      <section className="bg-surface border-y border-border py-12">
+      {/* Trust Section */}
+      <section className="bg-surface border-y border-border py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-16">
             {[
               { icon: ShieldCheck, title: 'Farm Fresh Daily', desc: 'All chicken sourced fresh every morning, never frozen.' },
               { icon: Zap, title: 'Quick Confirmation', desc: 'WhatsApp confirmation within minutes of placing your order.' },
               { icon: HomeIcon, title: 'Home Delivery', desc: 'Convenient delivery to your doorstep within the area.' },
               { icon: Leaf, title: 'Halal Certified', desc: 'All products are freshly slaughtered and halal certified.' }
             ].map((info, i) => (
-              <div key={i} className="flex flex-col items-center text-center space-y-4">
-                <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center text-accent">
-                  <info.icon className="w-7 h-7" />
+              <div key={i} className="flex flex-col items-center text-center space-y-6 group">
+                <div className="w-16 h-16 rounded-3xl bg-accent/10 flex items-center justify-center text-accent group-hover:scale-110 transition-transform shadow-lg shadow-accent/5">
+                  <info.icon className="w-8 h-8" />
                 </div>
-                <div className="space-y-1">
-                  <h4 className="font-bold font-heading text-lg">{info.title}</h4>
-                  <p className="text-muted text-sm leading-relaxed max-w-[200px]">{info.desc}</p>
+                <div className="space-y-2">
+                  <h4 className="font-black font-heading text-xl tracking-tight">{info.title}</h4>
+                  <p className="text-muted text-sm leading-relaxed max-w-[240px] mx-auto">{info.desc}</p>
                 </div>
               </div>
             ))}
