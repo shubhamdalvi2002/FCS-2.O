@@ -22,6 +22,8 @@ const Checkout = () => {
     specialInstructions: ''
   });
 
+  const [error, setError] = useState<string | null>(null);
+
   const currentDeliveryCharge = deliveryType === 'Delivery' ? deliveryCharge : 0;
   const total = subtotal + currentDeliveryCharge;
 
@@ -39,9 +41,10 @@ const Checkout = () => {
 
   const handleWhatsAppOrder = () => {
     if (!formData.name || !formData.phone || (deliveryType === 'Delivery' && !formData.address)) {
-      alert('Please fill in your name, phone, and address!');
+      setError('Please fill in all required fields (Name, Phone, and Address for delivery).');
       return;
     }
+    setError(null);
 
     const orderLines = cart.map(item => `• ${item.name} (${item.quantity} ${item.unit}${item.quantity > 1 && item.unit === 'egg' ? 's' : ''}) = ₹${item.price * item.quantity}`).join('\n');
     
@@ -58,7 +61,9 @@ const Checkout = () => {
 
     const encoded = encodeURIComponent(msg);
     const waURL = `https://wa.me/919890501565?text=${encoded}`;
-    window.open(waURL, '_blank');
+    
+    // Using window.location.href is more reliable in iFrames and mobile browsers than window.open
+    window.location.href = waURL;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -83,15 +88,14 @@ const Checkout = () => {
 
       await axios.post('/api/orders', orderData);
       
-      // Also trigger WhatsApp
-      handleWhatsAppOrder();
-
-      setIsSuccess(true);
+      // Clear cart before redirecting
       clearCart();
-      setTimeout(() => navigate('/'), 3000);
+
+      // Trigger WhatsApp
+      handleWhatsAppOrder();
     } catch (err) {
       console.error(err);
-      alert('Failed to place order. Please try again.');
+      setError('Failed to process order. Please try again.');
     } finally {
       setIsProcessing(false);
     }
@@ -125,6 +129,11 @@ const Checkout = () => {
       <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         {/* Details */}
         <div className="lg:col-span-2 space-y-12">
+          {error && (
+            <div className="p-4 bg-accent2/10 border border-accent2/20 rounded-2xl text-accent2 text-sm font-bold animate-shake">
+              {error}
+            </div>
+          )}
           {/* Delivery Method */}
           <section className="space-y-6">
             <h3 className="text-xl font-bold font-syne flex items-center gap-3">
