@@ -39,14 +39,14 @@ const Checkout = () => {
     }
   }, [isDeliveryAllowed, deliveryType]);
 
-  const handleWhatsAppOrder = () => {
+  const handleWhatsAppOrder = (currentCart: typeof cart) => {
     if (!formData.name || !formData.phone || (deliveryType === 'Delivery' && !formData.address)) {
       setError('Please fill in all required fields (Name, Phone, and Address for delivery).');
       return;
     }
     setError(null);
 
-    const orderLines = cart.map(item => `• ${item.name} (${item.quantity} ${item.unit}${item.quantity > 1 && item.unit === 'egg' ? 's' : ''}) = ₹${item.price * item.quantity}`).join('\n');
+    const orderLines = currentCart.map(item => `• ${item.name} (${item.quantity} ${item.unit}${item.quantity > 1 && item.unit === 'egg' ? 's' : ''}) = ₹${item.price * item.quantity}`).join('\n');
     
     const msg = `🍗 *FCS 2.0 - NEW ORDER* 🍗\n\n` +
       `👤 *Customer Details:*\n` +
@@ -86,16 +86,21 @@ const Checkout = () => {
         specialInstructions: formData.specialInstructions
       };
 
-      await axios.post('/api/orders', orderData);
+      // Try to save to DB, but don't block WhatsApp if it fails
+      try {
+        await axios.post('/api/orders', orderData);
+      } catch (apiErr) {
+        console.warn('API order saving failed, proceeding to WhatsApp:', apiErr);
+      }
       
-      // Clear cart before redirecting
+      // Trigger WhatsApp with current cart data
+      handleWhatsAppOrder(cart);
+      
+      // Clear cart AFTER triggering WhatsApp
       clearCart();
-
-      // Trigger WhatsApp
-      handleWhatsAppOrder();
     } catch (err) {
-      console.error(err);
-      setError('Failed to process order. Please try again.');
+      console.error('Checkout error:', err);
+      setError('Something went wrong. Please try again.');
     } finally {
       setIsProcessing(false);
     }
