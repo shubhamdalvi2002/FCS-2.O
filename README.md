@@ -1,20 +1,58 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Family Chicken Shop
 
-# Run and deploy your AI Studio app
+Premium quality farm-fresh chicken and eggs delivered to your doorstep. We prioritize hygiene, freshness, and customer satisfaction in every order.
 
-This contains everything you need to run your app locally.
+## Features
 
-View your app in AI Studio: https://ai.studio/apps/3b8751a3-3223-48ce-bd38-c9763c4f2bcd
+- **Farm Fresh Daily**: All chicken sourced fresh every morning, never frozen.
+- **Quick WhatsApp Confirmation**: WhatsApp confirmation within minutes of placing your order.
+- **Home Delivery**: Convenient delivery to your doorstep within the area.
+- **Halal Certified**: All products are freshly slaughtered and halal certified.
+- **Easy Checkout**: Simple and fast order placement with WhatsApp integration.
+- **Admin Dashboard**: Manage products, orders, and shop settings efficiently.
 
-## Run Locally
+## Tech Stack
 
-**Prerequisites:**  Node.js
+- **Frontend**: React with Vite, TypeScript, Tailwind CSS
+- **Animations**: Motion (formerly Framer Motion)
+- **Icons**: Lucide React
+- **Backend**: Node.js with Express
+- **State Management**: React Context API
 
+## Getting Started
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### Prerequisites
+
+- Node.js (v18 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. The application will be available at `http://localhost:3000`.
+
+## Project Structure
+
+- `src/components`: Reusable UI components.
+- `src/pages`: Main application pages (Home, Shop, Cart, Checkout, Admin).
+- `src/context`: State management using Context API.
+- `src/data`: Static data and fallback products.
+- `server.ts`: Express server for API endpoints.
+
+## License
+
+This project is licensed under the MIT License.
